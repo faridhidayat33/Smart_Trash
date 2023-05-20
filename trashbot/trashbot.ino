@@ -107,21 +107,25 @@ void loop() {  //perintah perulangan
   Serial.println(" cm");
   if(orang<=6){
     open_gate();
-  }
-  int sampah = read_sampah();
-  Serial.print("jarak sampah :");
-  Serial.print(sampah);
-  Serial.println(" cm");
-  if(sampah<=3) {
-    int apakah_logam = check_logam();
-    if (apakah_logam == HIGH) {
-      buang_logam();
-    } 
-    if (apakah_logam = LOW) {
-      buang_non_logam();
+    int sampah = read_sampah();
+    delay(300);
+    Serial.print("jarak sampah :");
+    Serial.print(sampah);
+    Serial.println(" cm");
+    if(sampah<=3) {
+      int apakah_logam = check_logam();
+      if (apakah_logam == HIGH) {
+        buang_logam();
+      } 
+      else (apakah_logam = LOW) {
+        buang_non_logam();
+      }
     }
+    close_gate();
   }
 }
+
+// ------------------------------------------------------------------------
 
 int read_depan() {
   digitalWrite(sensor_jarak_pin, LOW);
@@ -136,6 +140,28 @@ int read_depan() {
   Serial.println(" cm");
   return dis_jarak;
   
+}
+
+int read_sampah() {
+  digitalWrite(sensor_sampah_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensor_sampah_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(sensor_sampah_pin, LOW);
+  dur_sampah = pulseIn(echo_sampah_pin, HIGH);
+  dis_sampah = (dur_sampah / 2) / 28.5;
+  Serial.print("Sensor Sampah = ");
+  Serial.print(dis_sampah);
+  Serial.println(" cm");
+  return dis_sampah;
+}
+
+void close_gate() {
+  for(pintupos=0;pintupos<90;pintupos+=1){
+    servo_pintu.write(pintupos);
+    Serial.print("5");
+    delay(15);
+  }
 }
 
 void open_gate() {
@@ -206,19 +232,7 @@ int read_logam() {  //perintah baca sensor 3
   return dis_logam;
 }
 
-int read_sampah() {
-  digitalWrite(sensor_sampah_pin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(sensor_sampah_pin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(sensor_sampah_pin, LOW);
-  dur_sampah = pulseIn(echo_sampah_pin, HIGH);
-  dis_sampah = (dur_sampah / 2) / 28.5;
-  Serial.print("Sensor Sampah = ");
-  Serial.print(dis_sampah);
-  Serial.println(" cm");
-  return dis_sampah;
-}
+// -------------------------------------------------------------------------------------
 
 void read_proximity() {
   digitalWrite(sensor_sampah_pin, LOW);
