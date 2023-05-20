@@ -81,10 +81,143 @@ void setup() {  //mulai awal progam
   
 void loop() {  //perintah perulangan
   Blynk.run();
-  read_jarak(); 
-//  read_proximity();
-  read_nlogam();
-  read_logam();
+  int logam = read_logam();
+  if(logam<=1){
+    Serial.println("sampah logam penuh");
+    digitalWrite(led_metal_green, HIGH);
+  }
+  else{
+    Serial.println("sampah logam kosong");
+    digitalWrite(led_metal_green, LOW);
+  }        
+
+  int nlogam = read_nlogam();
+  if(nlogam<=1){
+    Serial.println("sampah non-logam penuh");
+    digitalWrite(led_metal_red, HIGH);
+  }
+  else{
+    Serial.println("sampah non-logam kosong");
+    digitalWrite(led_metal_red, LOW);
+  }        
+
+  int orang = read_depan();
+  Serial.print("jarak orang : ");
+  Serial.print(orang);
+  Serial.println(" cm");
+  if(orang<=6){
+    open_gate();
+  }
+  int sampah = read_sampah();
+  Serial.print("jarak sampah :");
+  Serial.print(sampah);
+  Serial.println(" cm");
+  if(sampah<=3) {
+    int apakah_logam = check_logam();
+    if (apakah_logam == HIGH) {
+      buang_logam();
+    } 
+    if (apakah_logam = LOW) {
+      buang_non_logam();
+    }
+  }
+}
+
+int read_depan() {
+  digitalWrite(sensor_jarak_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensor_jarak_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(sensor_jarak_pin, LOW);
+  dur_jarak = pulseIn(echo_jarak_pin, HIGH);
+  dis_jarak = (dur_jarak / 2) / 28.5;
+  Serial.print("Sensor Orang = ");
+  Serial.print(dis_jarak);
+  Serial.println(" cm");
+  return dis_jarak;
+  
+}
+
+void open_gate() {
+  for(pintupos=0;pintupos<90;pintupos+=1){
+    servo_pintu.write(pintupos);
+    Serial.print("5");
+    delay(15);
+  }
+}
+
+int check_logam() {
+  int proxin = digitalRead(prox_pin); //pembacaan data dari sensor proximity
+  Serial.println("check logam");
+  return proxin;
+}
+
+void buang_logam() {
+  for(dividerpos=180;dividerpos>=0;dividerpos-=1){
+    servo_divider.write(dividerpos);
+    Serial.print("1");
+    delay(15);
+  }
+  for(dividerpos=0;dividerpos<=180;dividerpos+=1){
+    servo_divider.write(dividerpos);
+    Serial.print("2");
+    delay(15);
+  }
+}
+
+void buang_non_logam() {
+  for(dividerpos=180;dividerpos<=180;dividerpos+=1){
+    servo_divider.write(dividerpos);
+    Serial.print("3");
+    delay(15);
+  }
+  for(dividerpos=180;dividerpos>=180;dividerpos-=1){
+    servo_divider.write(dividerpos);
+    Serial.print("4");
+    delay(15);
+  }
+}
+
+int read_nlogam() {  //perintah baca sensor 2
+  digitalWrite(nlogam_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(nlogam_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(nlogam_pin, LOW);
+  dur_nlogam = pulseIn(echo_nlogam_pin, HIGH);
+  dis_nlogam = (dur_nlogam / 2) / 28.5;
+  Serial.print("Sensor Non Logam = ");
+  Serial.print(dis_nlogam);
+  Serial.println(" cm");
+  return dis_nlogam;
+}
+
+int read_logam() {  //perintah baca sensor 3
+  digitalWrite(logam_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(logam_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(logam_pin, LOW);
+  dur_logam = pulseIn(echo_logam_pin, HIGH);
+  dis_logam = (dur_logam / 2) / 28.5;
+  Serial.print("Sensor Logam = ");
+  Serial.print(dis_logam);
+  Serial.println(" cm");
+  return dis_logam;
+}
+
+int read_sampah() {
+  digitalWrite(sensor_sampah_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensor_sampah_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(sensor_sampah_pin, LOW);
+  dur_sampah = pulseIn(echo_sampah_pin, HIGH);
+  dis_sampah = (dur_sampah / 2) / 28.5;
+  Serial.print("Sensor Sampah = ");
+  Serial.print(dis_sampah);
+  Serial.println(" cm");
+  return dis_sampah;
 }
 
 void read_proximity() {
@@ -156,43 +289,4 @@ void read_jarak() {  //perintah baca sensor 1
       read_proximity();
     }
 }
-void read_nlogam() {  //perintah baca sensor 2
-  digitalWrite(nlogam_pin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(nlogam_pin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(nlogam_pin, LOW);
-  dur_nlogam = pulseIn(echo_nlogam_pin, HIGH);
-  dis_nlogam = (dur_nlogam / 2) / 28.5;
-    Serial.print("Sensor Non Logam = ");
-    Serial.print(dis_nlogam);
-    Serial.println(" cm");
-    if(dis_nlogam<=1){
-      Serial.println("sampah non-logam penuh");
-      digitalWrite(led_metal_red, HIGH);
-    }
-    else{
-      Serial.println("sampah non-logam kosong");
-      digitalWrite(led_metal_red, LOW);
-    }        
-}
-void read_logam() {  //perintah baca sensor 3
-  digitalWrite(logam_pin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(logam_pin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(logam_pin, LOW);
-  dur_logam = pulseIn(echo_logam_pin, HIGH);
-  dis_logam = (dur_logam / 2) / 28.5;
-    Serial.print("Sensor Logam = ");
-    Serial.print(dis_logam);
-    Serial.println(" cm");
-    if(dis_logam<=1){
-      Serial.println("sampah logam penuh");
-      digitalWrite(led_metal_green, HIGH);
-    }
-    else{
-      Serial.println("sampah logam kosong");
-      digitalWrite(led_metal_green, LOW);
-    }        
-}
+
