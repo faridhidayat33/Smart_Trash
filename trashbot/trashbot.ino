@@ -123,7 +123,7 @@ void loop() {  //perintah perulangan
   }
 }
 
-int read_depan() {
+void read_depan() {
   digitalWrite(sensor_jarak_pin, LOW);
   delayMicroseconds(2);
   digitalWrite(sensor_jarak_pin, HIGH);
@@ -146,7 +146,7 @@ void open_gate() {
   }
 }
 
-int check_logam() {
+void check_logam() {
   int proxin = digitalRead(prox_pin); //pembacaan data dari sensor proximity
   Serial.println("check logam");
   return proxin;
@@ -178,7 +178,7 @@ void buang_non_logam() {
   }
 }
 
-int read_nlogam() {  //perintah baca sensor 2
+void read_nlogam() {  //perintah baca sensor 2
   digitalWrite(nlogam_pin, LOW);
   delayMicroseconds(2);
   digitalWrite(nlogam_pin, HIGH);
@@ -192,7 +192,7 @@ int read_nlogam() {  //perintah baca sensor 2
   return dis_nlogam;
 }
 
-int read_logam() {  //perintah baca sensor 3
+void read_logam() {  //perintah baca sensor 3
   digitalWrite(logam_pin, LOW);
   delayMicroseconds(2);
   digitalWrite(logam_pin, HIGH);
@@ -206,7 +206,7 @@ int read_logam() {  //perintah baca sensor 3
   return dis_logam;
 }
 
-int read_sampah() {
+void read_sampah() {
   digitalWrite(sensor_sampah_pin, LOW);
   delayMicroseconds(2);
   digitalWrite(sensor_sampah_pin, HIGH);
