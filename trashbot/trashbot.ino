@@ -173,9 +173,9 @@ void open_gate() {
 }
 
 void check_logam() {
-  int proxin = digitalRead(prox_pin); //pembacaan data dari sensor proximity
+  int prox_logam = digitalRead(prox_pin); //pembacaan data dari sensor proximity
   Serial.println("check logam");
-  return proxin;
+  return prox_logam;
 }
 
 void buang_logam() {
