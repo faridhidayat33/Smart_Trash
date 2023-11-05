@@ -1,15 +1,15 @@
-#define BLYNK_TEMPLATE_ID           "TMPLco5j1eZE"
-#define BLYNK_DEVICE_NAME           "Quickstart Device"
-#define BLYNK_AUTH_TOKEN            "5qGG_owkI9cRxFIdn9V8JniGWA2Vz5z5"
-#define BLYNK_PRINT Serial
+// //#define BLYNK_TEMPLATE_ID           "TMPLco5j1eZE"
+// #define BLYNK_DEVICE_NAME           "Quickstart Device"
+// #define BLYNK_AUTH_TOKEN            "5qGG_owkI9cRxFIdn9V8JniGWA2Vz5z5"
+// #define BLYNK_PRINT Serial
 
-#include <ESP8266WiFi.h>
+// #include <ESP8266WiFi.h>
 #include <Servo.h>
-#include <BlynkSimpleEsp8266.h>
+// #include <BlynkSimpleEsp8266.h>
 
-char auth[] = BLYNK_AUTH_TOKEN;
-char ssid[] = "Mau ?";
-char pass[] = "farid333";
+// char auth[] = BLYNK_AUTH_TOKEN;
+// char ssid[] = "Mau ?";
+// char pass[] = "farid333";
 
 Servo servo_pintu; 
 Servo servo_divider;
@@ -75,31 +75,31 @@ void setup() {  //mulai awal progam
   digitalWrite(D9, LOW);
   
   Serial.begin(115200); //RW system
-  Blynk.begin(auth, ssid, pass);
+  //Blynk.begin(auth, ssid, pass);
 
 }
   
 void loop() {  //perintah perulangan
-  Blynk.run();
-  int logam = read_logam();
-  if(logam<=1){
-    Serial.println("sampah logam penuh");
-    digitalWrite(led_metal_green, HIGH);
-  }
-  else{
-    Serial.println("sampah logam kosong");
-    digitalWrite(led_metal_green, LOW);
-  }        
+  //Blynk.run();
+  // int logam = read_logam();
+  // if(logam<=1){
+  //   Serial.println("sampah logam penuh");
+  //   digitalWrite(led_metal_green, HIGH);
+  // }
+  // else{
+  //   Serial.println("sampah logam kosong");
+  //   digitalWrite(led_metal_green, LOW);
+  // }        
 
-  int nlogam = read_nlogam();
-  if(nlogam<=1){
-    Serial.println("sampah non-logam penuh");
-    digitalWrite(led_metal_red, HIGH);
-  }
-  else{
-    Serial.println("sampah non-logam kosong");
-    digitalWrite(led_metal_red, LOW);
-  }        
+  // int nlogam = read_nlogam();
+  // if(nlogam<=1){
+  //   Serial.println("sampah non-logam penuh");
+  //   digitalWrite(led_metal_red, HIGH);
+  // }
+  // else{
+  //   Serial.println("sampah non-logam kosong");
+  //   digitalWrite(led_metal_red, LOW);
+  // }        
 
   int orang = read_depan();
   Serial.print("jarak orang : ");
@@ -114,10 +114,11 @@ void loop() {  //perintah perulangan
     Serial.println(" cm");
     if(sampah<=3) {
       int apakah_logam = check_logam();
-      if (apakah_logam == HIGH) {
+      Serial.println(apakah_logam);
+      if (apakah_logam == 0) {
         buang_logam();
-      } 
-      else (apakah_logam = LOW) {
+      }
+      else {
         buang_non_logam();
       }
     }
@@ -157,7 +158,7 @@ int read_sampah() {
 }
 
 void close_gate() {
-  for(pintupos=0;pintupos<90;pintupos+=1){
+  for(pintupos=180;pintupos>=0;pintupos-=1){
     servo_pintu.write(pintupos);
     Serial.print("5");
     delay(15);
@@ -165,7 +166,7 @@ void close_gate() {
 }
 
 void open_gate() {
-  for(pintupos=0;pintupos<90;pintupos+=1){
+  for(pintupos=0;pintupos<180;pintupos+=1){
     servo_pintu.write(pintupos);
     Serial.print("5");
     delay(15);
@@ -179,12 +180,12 @@ int check_logam() {
 }
 
 void buang_logam() {
-  for(dividerpos=180;dividerpos>=0;dividerpos-=1){
+  for(dividerpos=90;dividerpos>=0;dividerpos-=1){
     servo_divider.write(dividerpos);
     Serial.print("1");
     delay(15);
   }
-  for(dividerpos=0;dividerpos<=180;dividerpos+=1){
+  for(dividerpos=0;dividerpos<90;dividerpos+=1){
     servo_divider.write(dividerpos);
     Serial.print("2");
     delay(15);
@@ -192,12 +193,12 @@ void buang_logam() {
 }
 
 void buang_non_logam() {
-  for(dividerpos=180;dividerpos<=180;dividerpos+=1){
+  for(dividerpos=90;dividerpos<=180;dividerpos+=1){
     servo_divider.write(dividerpos);
     Serial.print("3");
     delay(15);
   }
-  for(dividerpos=180;dividerpos>=180;dividerpos-=1){
+  for(dividerpos=180;dividerpos>=90;dividerpos-=1){
     servo_divider.write(dividerpos);
     Serial.print("4");
     delay(15);
