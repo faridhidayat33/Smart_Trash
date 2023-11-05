@@ -80,27 +80,7 @@ void setup() {  //mulai awal progam
 }
   
 void loop() {  //perintah perulangan
-  //Blynk.run();
-  // int logam = read_logam();
-  // if(logam<=1){
-  //   Serial.println("sampah logam penuh");
-  //   digitalWrite(led_metal_green, HIGH);
-  // }
-  // else{
-  //   Serial.println("sampah logam kosong");
-  //   digitalWrite(led_metal_green, LOW);
-  // }        
-
-  // int nlogam = read_nlogam();
-  // if(nlogam<=1){
-  //   Serial.println("sampah non-logam penuh");
-  //   digitalWrite(led_metal_red, HIGH);
-  // }
-  // else{
-  //   Serial.println("sampah non-logam kosong");
-  //   digitalWrite(led_metal_red, LOW);
-  // }        
-
+  Blynk.run();
   int orang = read_depan();
   Serial.print("jarak orang : ");
   Serial.print(orang);
@@ -124,6 +104,26 @@ void loop() {  //perintah perulangan
     }
     close_gate();
   }
+  int logam = read_logam();
+  if(logam<=1){
+    Serial.println("sampah logam penuh");
+    digitalWrite(led_metal_green, HIGH);
+  }
+  else{
+    Serial.println("sampah logam kosong");
+    digitalWrite(led_metal_green, LOW);
+  }        
+
+  int nlogam = read_nlogam();
+  if(nlogam<=1){
+    Serial.println("sampah non-logam penuh");
+    digitalWrite(led_metal_red, HIGH);
+  }
+  else{
+    Serial.println("sampah non-logam kosong");
+    digitalWrite(led_metal_red, LOW);
+  }        
+
 }
 
 // ------------------------------------------------------------------------
