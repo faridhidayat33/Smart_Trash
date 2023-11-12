@@ -1,6 +1,6 @@
-#define BLYNK_TEMPLATE_ID           "TMPLco5j1eZE"
-#define BLYNK_DEVICE_NAME           "Quickstart Device"
-#define BLYNK_AUTH_TOKEN            "5qGG_owkI9cRxFIdn9V8JniGWA2Vz5z5"
+#define BLYNK_TEMPLATE_ID "TMPL6Vws4pd5_"
+#define BLYNK_TEMPLATE_NAME "Smart Trash"
+#define BLYNK_AUTH_TOKEN "wBQ11SKvkEniZwLd-sRu8D_my4VrB1O9"
 #define BLYNK_PRINT Serial
 
 #include <ESP8266WiFi.h>
@@ -35,6 +35,11 @@ const int logam_pin = D7; //sensor ultrasonik volume sampah anorganik
 const int echo_logam_pin = D6; //sensor ultrasonik volume sampah anorganik
 unsigned int dur_logam; //sensor ultrasonik volume sampah anorganik
 unsigned int dis_logam; //sensor ultrasonik volume sampah anorganik
+int logam;
+int nlogam;
+
+BlynkTimer timer;
+
 
 
 void setup() {  //mulai awal progam
@@ -76,6 +81,7 @@ void setup() {  //mulai awal progam
   
   Serial.begin(115200); //RW system
   Blynk.begin(auth, ssid, pass);
+  timer.setInterval(1000L, myTimer);
 
 }
   
@@ -105,7 +111,7 @@ void loop() {  //perintah perulangan
     close_gate();
   }
 
-  int logam = read_logam();
+  logam = read_logam();
   if(logam<=1){
 //    Serial.println("sampah logam penuh");
     digitalWrite(led_metal_green, HIGH);
@@ -113,7 +119,7 @@ void loop() {  //perintah perulangan
   else{
 //    Serial.println("sampah logam kosong");
     digitalWrite(led_metal_green, LOW);
-    int nlogam = read_nlogam();
+    nlogam = read_nlogam();
     if(nlogam<=1){
   //    Serial.println("sampah non-logam penuh");
       digitalWrite(led_metal_red, HIGH);
@@ -122,10 +128,34 @@ void loop() {  //perintah perulangan
   //    Serial.println("sampah non-logam kosong");
       digitalWrite(led_metal_red, LOW);
     }        
-  }        
+  }
+
+  timer.run();        
 
 //  delay(10000);
 
+}
+
+void myTimer() {
+  logam = 37 - logam;
+  nlogam = 37 - nlogam;
+
+  Blynk.virtualWrite(V7, logam);
+  Blynk.virtualWrite(V5, nlogam);
+
+  if (logam > 32) {
+    Blynk.virtualWrite(V0, 1);
+  }
+  else {
+    Blynk.virtualWrite(V0, 0);
+  }
+  
+  if (nlogam > 32) {
+    Blynk.virtualWrite(V1, 1);
+  }
+  else {
+    Blynk.virtualWrite(V1, 0);
+  }
 }
 
 // ------------------------------------------------------------------------
