@@ -43,6 +43,8 @@ void setup() {
 
   pinMode(prox_pin, INPUT);
   digitalWrite(prox_pin, LOW);
+
+  Serial.begin(115200); //RW system
 }
 
 void loop() {

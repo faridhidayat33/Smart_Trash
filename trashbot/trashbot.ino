@@ -1,15 +1,15 @@
-// //#define BLYNK_TEMPLATE_ID           "TMPLco5j1eZE"
-// #define BLYNK_DEVICE_NAME           "Quickstart Device"
-// #define BLYNK_AUTH_TOKEN            "5qGG_owkI9cRxFIdn9V8JniGWA2Vz5z5"
-// #define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID           "TMPLco5j1eZE"
+#define BLYNK_DEVICE_NAME           "Quickstart Device"
+#define BLYNK_AUTH_TOKEN            "5qGG_owkI9cRxFIdn9V8JniGWA2Vz5z5"
+#define BLYNK_PRINT Serial
 
-// #include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 #include <Servo.h>
-// #include <BlynkSimpleEsp8266.h>
+#include <BlynkSimpleEsp8266.h>
 
-// char auth[] = BLYNK_AUTH_TOKEN;
-// char ssid[] = "Mau ?";
-// char pass[] = "farid333";
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "Mau ?";
+char pass[] = "farid333";
 
 Servo servo_pintu; 
 Servo servo_divider;
@@ -75,7 +75,7 @@ void setup() {  //mulai awal progam
   digitalWrite(D9, LOW);
   
   Serial.begin(115200); //RW system
-  //Blynk.begin(auth, ssid, pass);
+  Blynk.begin(auth, ssid, pass);
 
 }
   
@@ -104,25 +104,27 @@ void loop() {  //perintah perulangan
     }
     close_gate();
   }
+
   int logam = read_logam();
   if(logam<=1){
-    Serial.println("sampah logam penuh");
+//    Serial.println("sampah logam penuh");
     digitalWrite(led_metal_green, HIGH);
   }
   else{
-    Serial.println("sampah logam kosong");
+//    Serial.println("sampah logam kosong");
     digitalWrite(led_metal_green, LOW);
+    int nlogam = read_nlogam();
+    if(nlogam<=1){
+  //    Serial.println("sampah non-logam penuh");
+      digitalWrite(led_metal_red, HIGH);
+    }
+    else{
+  //    Serial.println("sampah non-logam kosong");
+      digitalWrite(led_metal_red, LOW);
+    }        
   }        
 
-  int nlogam = read_nlogam();
-  if(nlogam<=1){
-    Serial.println("sampah non-logam penuh");
-    digitalWrite(led_metal_red, HIGH);
-  }
-  else{
-    Serial.println("sampah non-logam kosong");
-    digitalWrite(led_metal_red, LOW);
-  }        
+//  delay(10000);
 
 }
 
@@ -163,6 +165,7 @@ void close_gate() {
     Serial.print("5");
     delay(15);
   }
+  Serial.println();
 }
 
 void open_gate() {
@@ -171,6 +174,7 @@ void open_gate() {
     Serial.print("5");
     delay(15);
   }
+  Serial.println();
 }
 
 int check_logam() {
@@ -185,11 +189,13 @@ void buang_logam() {
     Serial.print("1");
     delay(15);
   }
+  Serial.println();
   for(dividerpos=0;dividerpos<90;dividerpos+=1){
     servo_divider.write(dividerpos);
     Serial.print("2");
     delay(15);
   }
+  Serial.println();
 }
 
 void buang_non_logam() {
@@ -198,11 +204,13 @@ void buang_non_logam() {
     Serial.print("3");
     delay(15);
   }
+  Serial.println();
   for(dividerpos=180;dividerpos>=90;dividerpos-=1){
     servo_divider.write(dividerpos);
     Serial.print("4");
     delay(15);
   }
+  Serial.println();
 }
 
 int read_nlogam() {  //perintah baca sensor 2
@@ -248,14 +256,14 @@ void read_proximity() {
   Serial.println(" cm");
   if(dis_sampah<=6){
     int proxin = digitalRead(prox_pin); //pembacaan data dari sensor proximity
-    Serial.println("ada sampah");
+//    Serial.println("ada sampah");
     for(pintupos=90;pintupos>0;pintupos-=1){
       servo_pintu.write(pintupos);
       Serial.print("6");
       delay(15);
     }
     if(proxin==HIGH){ 
-      Serial.println("sampah non logam");
+//      Serial.println("sampah non logam");
       for(dividerpos=180;dividerpos>=0;dividerpos-=1){
         servo_divider.write(dividerpos);
         Serial.print("1");
@@ -268,7 +276,7 @@ void read_proximity() {
       }
     }
     else{
-      Serial.println("sampah logam");
+//      Serial.println("sampah logam");
       for(dividerpos=180;dividerpos<=180;dividerpos+=1){
         servo_divider.write(dividerpos);
         Serial.print("3");
@@ -295,7 +303,7 @@ void read_jarak() {  //perintah baca sensor 1
     Serial.print(dis_jarak);
     Serial.println(" cm");
     if(dis_jarak<=6){
-      Serial.println("ada pengguna mendekat");
+//      Serial.println("ada pengguna mendekat");
       for(pintupos=0;pintupos<90;pintupos+=1){
         servo_pintu.write(pintupos);
         Serial.print("5");
