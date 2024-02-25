@@ -27,8 +27,8 @@ const int sensor_sampah_pin = D15; //sensor ultrasonik jarak objek
 const int echo_sampah_pin = D14; //sensor ultrasonik jarak objek
 unsigned int dur_sampah; //sensor ultrasonik jarak objek
 unsigned int dis_sampah; //sensor ultrasonik jarak objek
-const int nlogam_pin = D5; //sensor ultrasonik volume sampah organik
-const int echo_nlogam_pin = D4; //sensor ultrasonik volume sampah organik
+const int nlogam_pin = D11; //sensor ultrasonik volume sampah organik
+const int echo_nlogam_pin = D10; //sensor ultrasonik volume sampah organik
 unsigned int dur_nlogam; //sensor ultrasonik volume sampah organik
 unsigned int dis_nlogam;//sensor ultrasonik volume sampah organik
 const int logam_pin = D7; //sensor ultrasonik volume sampah anorganik
